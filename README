@@ -1,0 +1,19 @@
+Puppet[1] module for /etc/security/limits.conf file.
+
+Requires:
+  - augeas to be installed (http://www.augeas.net) - ruby-augeas bindings
+
+Usage:
+
+  class sample {
+    include "pam_limits"
+    ...
+    pam_limit {
+      "postgres_nofile":
+        domain => "postgres",
+        item   => "nofile",
+        value  => 2048;
+    }
+  }
+
+[1] http://www.puppetlabs.com/puppet/introduction/
