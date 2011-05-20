@@ -16,8 +16,8 @@ class pam_limits {
                 augeas {
                     "enable_limits_$name":
                         context => "/files$pam_dir/$name",
-                        incl    => "/files$pam_dir/$name",
-                        lens    => "pam.aug",
+                        incl    => "$pam_dir/$name",
+                        lens    => "Pam.lns",
                         onlyif  => "match *[type='session' and control='required' and module='pam_limits.so'] size < 1",
                         changes => [
                                     "ins 0 after *[label() = '#comment' and .=~ regexp('^[ \t]*session[ \t]+required[ \t]+pam_limits.so')]",
@@ -32,8 +32,8 @@ class pam_limits {
                 augeas {
                     "enable_limits_$name":
                         context => "/files$pam_dir/$name",
-                        incl    => "/files$pam_dir/$name",
-                        lens    => "pam.aug",
+                        incl    => "$pam_dir/$name",
+                        lens    => "Pam.lns",
                         onlyif  => "match *[type='session' and control='required' and module='pam_limits.so'] size > 0",
                         changes => "rm *[type='session' and control='required' and module='pam_limits.so']";
                 }
@@ -69,8 +69,8 @@ define pam_limit(
             augeas {
                 "$name":
                     context => "/files${pam_limits::conf_file}",
-                    incl    => "/files${pam_limits::conf_file}",
-                    lens    => "limits.aug",
+                    incl    => "${pam_limits::conf_file}",
+                    lens    => "Limits.lns",
                     onlyif  => "match domain[.='$domain' and type='$type' and item='$item' and value='$value'] size < 1",
                     changes => [ 
                                     "rm  domain[.='$domain' and type='$type' and item='$item']",
@@ -87,8 +87,8 @@ define pam_limit(
             augeas {
                 "$name":
                     context => "/files${pam_limits::conf_file}",
-                    incl    => "/files${pam_limits::conf_file}",
-                    lens    => "limits.aug",
+                    incl    => "${pam_limits::conf_file}",
+                    lens    => "Limits.lns",
                     onlyif  => "match domain[.='$domain' and type='$type' and item='$item'] size > 0",
                     changes => "rm domain[.='$domain' and type='$type' and item='$item']";
             }
