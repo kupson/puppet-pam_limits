@@ -45,13 +45,8 @@ class pam_limits {
         }
     }
 
-    case "$lsbdistid/$lsbdistcodename" {
-        "Debian/lenny": {
-            module_limits_so {
-                [ "login", "su", "cron", "sshd" ]:
-                    ensure => "present";
-            }
-        }
+    module_limits_so{[ 'login', 'su', 'cron', 'sshd' ]:
+      ensure => 'present';
     }
 
 }
@@ -71,15 +66,12 @@ define pam_limit(
                     context => "/files${pam_limits::conf_file}",
                     incl    => "${pam_limits::conf_file}",
                     lens    => "Limits.lns",
-                    onlyif  => "match domain[.='$domain' and type='$type' and item='$item' and value='$value'] size < 1",
-                    changes => [ 
-                                    "rm  domain[.='$domain' and type='$type' and item='$item']",
-                                    "ins domain after domain[last()]",
-                                    "set domain[last()] $domain",
-                                    "set domain[last()]/type $type",
-                                    "set domain[last()]/item $item",
-                                    "set domain[last()]/value $value",
-                                ];
+                    changes => [
+                      "set domain[.='$domain' and type='$type' and item='$item'] '$domain'",
+                      "set domain[type='$type' or count(type)=0]/type '$type'",
+                      "set domain[item='$item' or count(item)=0]/item '$item'",
+                      "set domain[.='$domain' and type='$type' and item='$item']/value '$value'",
+                      ],
             }
         }
 
