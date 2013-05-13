@@ -8,7 +8,7 @@ Usage:
   class sample {
     include "pam_limits"
     ...
-    pam_limit {
+    pam_limits::pam_limit {
       "postgres_nofile":
         domain => "postgres",
         item   => "nofile",
